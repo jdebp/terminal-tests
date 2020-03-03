@@ -12,7 +12,7 @@ if ($host.PrivateData -and $host.PrivateData.GetType().Name -eq "ISEOptions") {
     Write-Error "Do not run this in PowerShell ISE."
     return
 }
-if ($host.UI.RawUI.WindowBuffer.Width -lt 1) {
+if ($host.UI.RawUI.WindowSize.Width -lt 1) {
 	Write-Error "This requires a valid window buffer."
    return
 }
