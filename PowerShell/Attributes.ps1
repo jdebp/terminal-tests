@@ -51,9 +51,10 @@ function Do-It {
 
     CUP  1 0 ; [console]::Write("Font weights and slants:") 
         CUP  2 4 ; SGR  1 ; [console]::Write("Boldface") ; SGR 22 ; [console]::Write(" / not boldface") ; SGR 0
-        CUP  3 4 ; SGR  0 ; [console]::Write("Normal (medium)") 
-        CUP  4 4 ; SGR  2 ; [console]::Write("Light (faint)") ; SGR 22 ; [console]::Write(" / not light") ; SGR 0
-        CUP  5 4 ; 
+        CUP  3 4 ; SGR  1 2 ; [console]::Write("Demibold (faint boldface)") ; SGR 22 ; [console]::Write(" / not demibold") ; SGR 0
+        CUP  4 4 ; SGR  0 ; [console]::Write("Medium (normal)") 
+        CUP  5 4 ; SGR  2 ; [console]::Write("Faint") ; SGR 22 ; [console]::Write(" / not faint") ; SGR 0
+        CUP  6 4 ; 
             SGR 10 ; [console]::Write("SGR 10") ; SGR 0 ; [console]::Write(" - ")
             SGR 11 ; [console]::Write("SGR 11") ; SGR 0 ; [console]::Write(" - ")
             SGR 12 ; [console]::Write("SGR 12") ; SGR 0 ; [console]::Write(" - ")
@@ -64,7 +65,7 @@ function Do-It {
             SGR 17 ; [console]::Write("SGR 17") ; SGR 0 ; [console]::Write(" - ")
             SGR 18 ; [console]::Write("SGR 18") ; SGR 0 ; [console]::Write(" - ")
             SGR 19 ; [console]::Write("SGR 19") ; SGR 0 ; #[console]::Write(" - ")
-        CUP  6 4 ; SGR  3 ; [console]::Write("Italic") ; SGR 23 ; [console]::Write(" / no italic") ; SGR 0
+        CUP  7 4 ; SGR  3 ; [console]::Write("Italic") ; SGR 23 ; [console]::Write(" / no italic") ; SGR 0
         
 
     CUP  9 0 ; [console]::Write("Standard attributes:") 
@@ -134,22 +135,10 @@ $csi_groupbox.Height = $vertical_grid - 15
 
 # checkboxes
 
-$use_alt_abs_checkbox = New-Object System.Windows.Forms.CheckBox
-$use_alt_abs_checkbox.Text = "Use alternative H/V absolute motions"
-$use_alt_abs_checkbox.AutoSize = $true
-$use_alt_abs_checkbox.Top = $csi_label.Top + $vertical_grid
-$use_alt_abs_checkbox.Left = $csi_label.Left
-
-$use_alt_rel_checkbox = New-Object System.Windows.Forms.CheckBox
-$use_alt_rel_checkbox.Text = "Use alternative H/V relative motions"
-$use_alt_rel_checkbox.AutoSize = $true
-$use_alt_rel_checkbox.Top = $use_alt_abs_checkbox.Top + $vertical_grid
-$use_alt_rel_checkbox.Left = $csi_label.Left
-
 $background_checkbox = New-Object System.Windows.Forms.CheckBox
 $background_checkbox.Text = "Light background (inverse video, DEC mode 5)"
 $background_checkbox.AutoSize = $true
-$background_checkbox.Top = $use_alt_rel_checkbox.Top + $vertical_grid
+$background_checkbox.Top = $csi_label.Top + $vertical_grid + 10
 $background_checkbox.Left = $csi_label.Left
 
 # main form
