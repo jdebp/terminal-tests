@@ -66,7 +66,6 @@ function DECSCNM {
 function Do-It {
     CUP
     SGR
-	 SGR 30 47
 	 DECSCNM $($script:scnm -gt 0)
     ED 2
     
