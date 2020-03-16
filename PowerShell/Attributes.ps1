@@ -43,10 +43,21 @@ function SGR {
     [console]::Write([string]::format("{0}{1}m", $CSI, $(ECMA48Params $args))) 
 }
 
+function DECPrivateMode {
+    param ($m = 1, $v = $true) 
+    $v = if ($v) {"h"} else {"l"}
+    [console]::Write([string]::format("{0}?{1:D}{2}", $CSI, $m, $v)) 
+}
+
+function DECSCNM {
+    param ($v = $true) 
+    DECPrivateMode 5 $v
+}
+
 function Do-It {
     CUP
     SGR
-    [console]::Write([string]::format("{0}?{1:D}{2}", $CSI, 5, $(if ($script:scnm -gt 0) {"h"} else {"l"})))
+	 DECSCNM $($script:scnm -gt 0)
     ED 2
 
     CUP  1 0 ; [console]::Write("Font weights and slants:") 

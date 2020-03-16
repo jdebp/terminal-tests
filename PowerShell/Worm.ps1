@@ -77,6 +77,11 @@ function DECPrivateMode {
     [console]::Write([string]::format("{0}?{1:D}{2}", $CSI, $m, $v)) 
 }
 
+function DECSCNM {
+    param ($v = $true) 
+    DECPrivateMode 5 $v
+}
+
 function DECOM {
     param ($v = $true) 
     DECPrivateMode 6 $v
@@ -207,7 +212,7 @@ function Do-It {
     CUP
 	 SGR
     ED 2
-	 [console]::Write([string]::format("{0}?{1:D}{2}", $CSI, 5, $(if ($script:scnm -gt 0) {"h"} else {"l"})))
+	 DECSCNM $($script:scnm -gt 0)
     if ($script:origin_mode) {
         CUP
         SGR 7
