@@ -157,8 +157,6 @@ $background_checkbox.Left = $csi_label.Left
 $form = New-Object System.Windows.Forms.Form
 $form.Controls.Add($csi_label)
 $form.Controls.Add($csi_groupbox)
-$form.Controls.Add($use_alt_abs_checkbox)
-$form.Controls.Add($use_alt_rel_checkbox)
 $form.Controls.Add($background_checkbox)
 $form.Text = "SGR attributes test"
 $form.AutoSize = $true
@@ -178,15 +176,11 @@ if ([Console]::OutputEncoding.IsSingleByte) {
     $csi8_radiobutton.Checked = $true
 }
 $scnm = $false
-$use_alt_abs_checkbox.Enabled = $false
-$use_alt_rel_checkbox.Enabled = $false
 $background_checkbox.Checked = $true
 
 $csi7_radiobutton.add_Click({Click})
 $csi8_radiobutton.add_Click({Click})
 $csiu_radiobutton.add_Click({Click})
-$use_alt_abs_checkbox.add_Click({Click})
-$use_alt_rel_checkbox.add_Click({Click})
 $background_checkbox.add_Click({Click})
 
 Click
