@@ -4,17 +4,23 @@
 
 ## A 16 by 16 colour matrix.
 
-## NOTE: This script does not set [console]::OutputEncoding.
-## This is one of the test conditions that one might want to vary.
-
 if ($host.PrivateData -and $host.PrivateData.GetType().Name -eq "ISEOptions") {
     Write-Error "Do not run this in PowerShell ISE."
     return
 }
 
 function C1 {
-    param ($n)
-    if ($Script:csi7_radiobutton.Checked) { [char]27 + [char]($n - 64) } elseif ($Script:csi8_radiobutton.Checked) { [char]$n } else { [char]194 + [char]$n }
+    if ($script:csi7_radiobutton.Checked) {
+        $script:CSI = [char]27 + [char]0x5B
+        [Console]::OutputEncoding = [System.Text.Encoding]::ASCII
+    } else { 
+        $script:CSI = [char]0x9B
+        if ($script:csi8_radiobutton.Checked) {
+            [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+        } else {
+            [Console]::OutputEncoding = [System.Text.Encoding]::Unicode
+		}
+    }
 }
 
 function ECMA48Params {
@@ -208,15 +214,15 @@ $csi7_radiobutton.AutoSize = $true
 $csi7_radiobutton.Top = 10
 $csi7_radiobutton.Left = 10
 $csi8_radiobutton = New-Object System.Windows.Forms.RadioButton
-$csi8_radiobutton.Text = "8-bit"
+$csi8_radiobutton.Text = "UTF-8"
 $csi8_radiobutton.AutoSize = $true
 $csi8_radiobutton.Top = $csi7_radiobutton.Top
-$csi8_radiobutton.Left = $csi7_radiobutton.Left + 50
+$csi8_radiobutton.Left = $csi7_radiobutton.Left + 60
 $csiu_radiobutton = New-Object System.Windows.Forms.RadioButton
-$csiu_radiobutton.Text = "Unicode"
+$csiu_radiobutton.Text = "UTF-16"
 $csiu_radiobutton.AutoSize = $true
 $csiu_radiobutton.Top = $csi8_radiobutton.Top
-$csiu_radiobutton.Left = $csi8_radiobutton.Left + 50
+$csiu_radiobutton.Left = $csi8_radiobutton.Left + 60
 
 $csi_groupbox = New-Object System.Windows.Forms.GroupBox
 $csi_groupbox.Controls.Add($csi7_radiobutton)
@@ -258,7 +264,7 @@ $form.Opacity = 0.9
 
 function Click {
     $script:colourmode = if ($Script:aixterm_radiobutton.Checked) { "A" } elseif ($Script:xterm_radiobutton.Checked) { "V" } else { "T" }
-    $script:CSI = C1 155
+    C1
     $script:conformant = $script:strict_checkbox.Checked
     $script:scnm = $script:background_checkbox.Checked
     Do-It
