@@ -5,17 +5,23 @@
 ## A test of zero no longer being the same as an empty (i.e. default) parameter
 ## See Annex E of ECMA-48:1986 .
 
-## NOTE: This script does not set [console]::OutputEncoding.
-## This is one of the test conditions that one might want to vary.
-
 if ($host.PrivateData -and $host.PrivateData.GetType().Name -eq "ISEOptions") {
     Write-Error "Do not run this in PowerShell ISE."
     return
 }
 
 function C1 {
-    param ($n)
-    if ($Script:csi7_radiobutton.Checked) { [char]27 + [char]($n - 64) } elseif ($Script:csi8_radiobutton.Checked) { [char]$n } else { [char]194 + [char]$n }
+    if ($script:csi7_radiobutton.Checked) {
+        $script:CSI = [char]27 + [char]0x5B
+        [Console]::OutputEncoding = [System.Text.Encoding]::ASCII
+    } else { 
+        $script:CSI = [char]0x9B
+        if ($script:csi8_radiobutton.Checked) {
+            [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+        } else {
+            [Console]::OutputEncoding = [System.Text.Encoding]::Unicode
+		}
+    }
 }
 
 function ECMA48Params {
@@ -61,6 +67,17 @@ function CUF {
 function CUB { 
     param ($p = 1) 
     [console]::Write([string]::format("{0}{1:D}D", $CSI, $p)) 
+}
+
+function Mode {
+    param ($m = 1, $v = $true) 
+    $v = if ($v) {"h"} else {"l"}
+    [console]::Write([string]::format("{0}{1:D}{2}", $CSI, $m, $v)) 
+}
+
+function ZDM {
+    param ($v = $true) 
+    Mode 22 $v
 }
 
 function Do-It {
@@ -124,15 +141,15 @@ $csi7_radiobutton.AutoSize = $true
 $csi7_radiobutton.Top = 10
 $csi7_radiobutton.Left = 10
 $csi8_radiobutton = New-Object System.Windows.Forms.RadioButton
-$csi8_radiobutton.Text = "8-bit"
+$csi8_radiobutton.Text = "UTF-8"
 $csi8_radiobutton.AutoSize = $true
 $csi8_radiobutton.Top = $csi7_radiobutton.Top
-$csi8_radiobutton.Left = $csi7_radiobutton.Left + 50
+$csi8_radiobutton.Left = $csi7_radiobutton.Left + 60
 $csiu_radiobutton = New-Object System.Windows.Forms.RadioButton
-$csiu_radiobutton.Text = "Unicode"
+$csiu_radiobutton.Text = "UTF-16"
 $csiu_radiobutton.AutoSize = $true
 $csiu_radiobutton.Top = $csi8_radiobutton.Top
-$csiu_radiobutton.Left = $csi8_radiobutton.Left + 50
+$csiu_radiobutton.Left = $csi8_radiobutton.Left + 60
 
 $csi_groupbox = New-Object System.Windows.Forms.GroupBox
 $csi_groupbox.Controls.Add($csi7_radiobutton)
@@ -143,27 +160,20 @@ $csi_groupbox.Left = $csi_label.Left + 100
 $csi_groupbox.Top = $csi_label.Top - 5
 $csi_groupbox.Height = $vertical_grid - 15
 
-# Use alternative H/V absolute motions checkbox
-# Use alternative H/V relative motions checkbox
+# checkboxes
 
-$use_alt_abs_checkbox = New-Object System.Windows.Forms.CheckBox
-$use_alt_abs_checkbox.Text = "Use alternative H/V absolute motions"
-$use_alt_abs_checkbox.AutoSize = $true
-$use_alt_abs_checkbox.Top = $csi_label.Top + $vertical_grid
-$use_alt_abs_checkbox.Left = $csi_label.Left
-$use_alt_rel_checkbox = New-Object System.Windows.Forms.CheckBox
-$use_alt_rel_checkbox.Text = "Use alternative H/V relative motions"
-$use_alt_rel_checkbox.AutoSize = $true
-$use_alt_rel_checkbox.Top = $use_alt_abs_checkbox.Top + $vertical_grid
-$use_alt_rel_checkbox.Left = $csi_label.Left
+$zdm_checkbox = New-Object System.Windows.Forms.CheckBox
+$zdm_checkbox.Text = "Mode 22"
+$zdm_checkbox.AutoSize = $true
+$zdm_checkbox.Top = $csi_label.Top + $vertical_grid
+$zdm_checkbox.Left = $csi_label.Left
 
 # main form
 
 $form = New-Object System.Windows.Forms.Form
 $form.Controls.Add($csi_label)
 $form.Controls.Add($csi_groupbox)
-$form.Controls.Add($use_alt_abs_checkbox)
-$form.Controls.Add($use_alt_rel_checkbox)
+$form.Controls.Add($zdm_checkbox)
 $form.Text = "Zero Default Mode test"
 $form.AutoSize = $true
 $form.Opacity = 0.9
@@ -171,7 +181,8 @@ $form.Opacity = 0.9
 # events
 
 function Click {
-    $script:CSI = C1 155
+    C1
+    ZDM $zdm_checkbox.Checked
     Do-It
 }
 
@@ -181,14 +192,11 @@ if ([Console]::OutputEncoding.IsSingleByte) {
     $csi8_radiobutton.Checked = $true
 }
 $scnm = $false
-$use_alt_abs_checkbox.Enabled = $false
-$use_alt_rel_checkbox.Enabled = $false
 
 $csi7_radiobutton.add_Click({Click})
 $csi8_radiobutton.add_Click({Click})
 $csiu_radiobutton.add_Click({Click})
-$use_alt_abs_checkbox.add_Click({Click})
-$use_alt_rel_checkbox.add_Click({Click})
+$zdm_checkbox.add_Click({Click})
 
 Click
 
