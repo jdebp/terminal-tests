@@ -5,17 +5,23 @@
 ## A test of SGR character attributes
 ## This includes the KiTTY extensions to SGR 4.
 
-## NOTE: This script does not set [console]::OutputEncoding.
-## This is one of the test conditions that one might want to vary.
-
 if ($host.PrivateData -and $host.PrivateData.GetType().Name -eq "ISEOptions") {
     Write-Error "Do not run this in PowerShell ISE."
     return
 }
 
 function C1 {
-    param ($n)
-    if ($Script:csi7_radiobutton.Checked) { [char]27 + [char]($n - 64) } elseif ($Script:csi8_radiobutton.Checked) { [char]$n } else { [char]194 + [char]$n }
+    if ($script:csi7_radiobutton.Checked) {
+        $script:CSI = [char]27 + [char]0x5B
+        [Console]::OutputEncoding = [System.Text.Encoding]::ASCII
+    } else { 
+        $script:CSI = [char]0x9B
+        if ($script:csi8_radiobutton.Checked) {
+            [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+        } else {
+            [Console]::OutputEncoding = [System.Text.Encoding]::Unicode
+		}
+    }
 }
 
 function ECMA48Params {
@@ -57,7 +63,7 @@ function DECSCNM {
 function Do-It {
     CUP
     SGR
-	 DECSCNM $($script:scnm -gt 0)
+	DECSCNM $($script:scnm -gt 0)
     ED 2
 
     CUP  1 0 ; [console]::Write("Font weights and slants:") 
@@ -77,19 +83,22 @@ function Do-It {
             SGR 18 ; [console]::Write("SGR 18") ; SGR 0 ; [console]::Write(" - ")
             SGR 19 ; [console]::Write("SGR 19") ; SGR 0 ; #[console]::Write(" - ")
         CUP  7 4 ; SGR  3 ; [console]::Write("Italic") ; SGR 23 ; [console]::Write(" / no italic") ; SGR 0
+        CUP  8 4 ; SGR 51 ; [console]::Write("Framed") ; SGR 54 ; [console]::Write(" / not framed") ; SGR 0
+        CUP  9 4 ; SGR 52 ; [console]::Write("Encircled") ; SGR 54 ; [console]::Write(" / not encircled") ; SGR 0
         
 
-    CUP  9 0 ; [console]::Write("Standard attributes:") 
-        CUP 10 4 ; SGR  4 ; [console]::Write("Underline") ; SGR 24 ; [console]::Write(" / no underline") ; SGR 0
-        CUP 11 4 ; SGR  5 ; [console]::Write("Blink") ; SGR 25 ; [console]::Write(" / no blink") ; SGR 0
-        CUP 12 4 ; SGR  6 ; [console]::Write("SGR 6") ; SGR 26 ; [console]::Write(" / no SGR 6") ; SGR 0
-        CUP 13 4 ; SGR  7 ; [console]::Write("Inverse") ; SGR 27 ; [console]::Write(" / no inverse") ; SGR 0
-        CUP 14 4 ; SGR  8 ; [console]::Write("Invisible") ; SGR 28 ; [console]::Write(" / no invisible") ; SGR 0
-        CUP 15 4 ; SGR  9 ; [console]::Write("Strikethrough") ; SGR 29 ; [console]::Write(" / no strikethrough") ; SGR 0
+    CUP 12 0 ; [console]::Write("Standard attributes:") 
+        CUP 13 4 ; SGR  4 ; [console]::Write("Underline") ; SGR 24 ; [console]::Write(" / no underline") ; SGR 0
+        CUP 14 4 ; SGR  5 ; [console]::Write("Blink") ; SGR 25 ; [console]::Write(" / no blink") ; SGR 0
+        CUP 15 4 ; SGR  6 ; [console]::Write("SGR 6") ; SGR 26 ; [console]::Write(" / no SGR 6") ; SGR 0
+        CUP 16 4 ; SGR  7 ; [console]::Write("Inverse") ; SGR 27 ; [console]::Write(" / no inverse") ; SGR 0
+        CUP 17 4 ; SGR  8 ; [console]::Write("Invisible") ; SGR 28 ; [console]::Write(" / no invisible") ; SGR 0
+        CUP 18 4 ; SGR  9 ; [console]::Write("Strikethrough") ; SGR 29 ; [console]::Write(" / no strikethrough") ; SGR 0
+        CUP 19 4 ; SGR 53 ; [console]::Write("Overline") ; SGR 55 ; [console]::Write(" / no overline") ; SGR 0
     
 # See https://github.com/kovidgoyal/kitty/issues/226
-    CUP 19 0 ; [console]::Write("SGR 4 extensions to provide underline variants: ") ; 
-    CUP 20 4
+    CUP 21 0 ; [console]::Write("SGR 4 extensions to provide underline variants: ") ; 
+    CUP 22 4
         SGR $(ECMA48SubParams 4 $null) ; [console]::Write("empty-default ") ; SGR 24
         SGR $(ECMA48SubParams 4 0) ; [console]::Write("zero-default ") ; SGR 24
         SGR $(ECMA48SubParams 4 1) ; [console]::Write("single ") ; SGR 24
@@ -125,15 +134,15 @@ $csi7_radiobutton.AutoSize = $true
 $csi7_radiobutton.Top = 10
 $csi7_radiobutton.Left = 10
 $csi8_radiobutton = New-Object System.Windows.Forms.RadioButton
-$csi8_radiobutton.Text = "8-bit"
+$csi8_radiobutton.Text = "UTF-8"
 $csi8_radiobutton.AutoSize = $true
 $csi8_radiobutton.Top = $csi7_radiobutton.Top
-$csi8_radiobutton.Left = $csi7_radiobutton.Left + 50
+$csi8_radiobutton.Left = $csi7_radiobutton.Left + 60
 $csiu_radiobutton = New-Object System.Windows.Forms.RadioButton
-$csiu_radiobutton.Text = "Unicode"
+$csiu_radiobutton.Text = "UTF-16"
 $csiu_radiobutton.AutoSize = $true
 $csiu_radiobutton.Top = $csi8_radiobutton.Top
-$csiu_radiobutton.Left = $csi8_radiobutton.Left + 50
+$csiu_radiobutton.Left = $csi8_radiobutton.Left + 60
 
 $csi_groupbox = New-Object System.Windows.Forms.GroupBox
 $csi_groupbox.Controls.Add($csi7_radiobutton)
@@ -165,7 +174,7 @@ $form.Opacity = 0.9
 # events
 
 function Click {
-    $script:CSI = C1 155
+    C1
     $script:scnm = $script:background_checkbox.Checked
     Do-It
 }
