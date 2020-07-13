@@ -67,11 +67,28 @@ function Do-It {
     ED 2
 
     CUP  1 0 ; [console]::Write("Font weights and slants:") 
-        CUP  2 4 ; SGR  1 ; [console]::Write("Boldface") ; SGR 22 ; [console]::Write(" / not boldface") ; SGR 0
-        CUP  3 4 ; SGR  1 2 ; [console]::Write("Demibold (faint boldface)") ; SGR 22 ; [console]::Write(" / not demibold") ; SGR 0
-        CUP  4 4 ; SGR  0 ; [console]::Write("Medium (normal)") 
-        CUP  5 4 ; SGR  2 ; [console]::Write("Faint") ; SGR 22 ; [console]::Write(" / not faint") ; SGR 0
-        CUP  6 4 ; 
+        CUP  2 4 ; 
+            SGR  1 ; [console]::Write("Upright boldface") ; 
+            SGR  2 ; [console]::Write(" - demibold (faint boldface)") ; 
+            SGR 22 ; [console]::Write(" - not boldface nor demibold") ; 
+            SGR 0
+        CUP  3 4 ; 
+            SGR  0 ; [console]::Write("Upright medium (normal)") 
+            SGR  2 ; [console]::Write(" - light (faint normal)") ; 
+            SGR 22 ; [console]::Write(" - not light") ; 
+            SGR 0
+        CUP  4 4 ; 
+            SGR  1 3 ; [console]::Write("Italic boldface") ; 
+            SGR  2 ; [console]::Write(" - demibold (faint boldface)") ; 
+            SGR 22 ; [console]::Write(" - not boldface nor demibold") ; 
+            SGR 0
+        CUP  5 4 ; 
+            SGR  3 ; [console]::Write("Italic medium (normal)") 
+            SGR  2 ; [console]::Write(" - light (faint normal)") ; 
+            SGR 22 ; [console]::Write(" - not light") ; 
+            SGR 0
+        CUP  7 4 ; SGR  3 ; [console]::Write("Italic") ; SGR 23 ; [console]::Write(" - no italic") ; SGR 0
+        CUP  8 4 ; 
             SGR 10 ; [console]::Write("SGR 10") ; SGR 0 ; [console]::Write(" - ")
             SGR 11 ; [console]::Write("SGR 11") ; SGR 0 ; [console]::Write(" - ")
             SGR 12 ; [console]::Write("SGR 12") ; SGR 0 ; [console]::Write(" - ")
@@ -82,19 +99,19 @@ function Do-It {
             SGR 17 ; [console]::Write("SGR 17") ; SGR 0 ; [console]::Write(" - ")
             SGR 18 ; [console]::Write("SGR 18") ; SGR 0 ; [console]::Write(" - ")
             SGR 19 ; [console]::Write("SGR 19") ; SGR 0 ; #[console]::Write(" - ")
-        CUP  7 4 ; SGR  3 ; [console]::Write("Italic") ; SGR 23 ; [console]::Write(" / no italic") ; SGR 0
-        CUP  8 4 ; SGR 51 ; [console]::Write("Framed") ; SGR 54 ; [console]::Write(" / not framed") ; SGR 0
-        CUP  9 4 ; SGR 52 ; [console]::Write("Encircled") ; SGR 54 ; [console]::Write(" / not encircled") ; SGR 0
         
 
-    CUP 12 0 ; [console]::Write("Standard attributes:") 
-        CUP 13 4 ; SGR  4 ; [console]::Write("Underline") ; SGR 24 ; [console]::Write(" / no underline") ; SGR 0
-        CUP 14 4 ; SGR  5 ; [console]::Write("Blink") ; SGR 25 ; [console]::Write(" / no blink") ; SGR 0
-        CUP 15 4 ; SGR  6 ; [console]::Write("SGR 6") ; SGR 26 ; [console]::Write(" / no SGR 6") ; SGR 0
-        CUP 16 4 ; SGR  7 ; [console]::Write("Inverse") ; SGR 27 ; [console]::Write(" / no inverse") ; SGR 0
-        CUP 17 4 ; SGR  8 ; [console]::Write("Invisible") ; SGR 28 ; [console]::Write(" / no invisible") ; SGR 0
-        CUP 18 4 ; SGR  9 ; [console]::Write("Strikethrough") ; SGR 29 ; [console]::Write(" / no strikethrough") ; SGR 0
-        CUP 19 4 ; SGR 53 ; [console]::Write("Overline") ; SGR 55 ; [console]::Write(" / no overline") ; SGR 0
+    CUP 10 0 ; [console]::Write("Standard attributes:") 
+        CUP 11 4 ; SGR  4 ; [console]::Write("Underline") ; SGR 24 ; [console]::Write(" - no underline") ; SGR 0
+        CUP 12 4 ; SGR  5 ; [console]::Write("Slow blink") ; SGR 25 ; [console]::Write(" - no slow blink") ; SGR 0
+        CUP 13 4 ; SGR  6 ; [console]::Write("Rapid blink") ; SGR 26 ; [console]::Write(" - no rapid blink") ; SGR 0
+        CUP 14 4 ; SGR  7 ; [console]::Write("Inverse") ; SGR 27 ; [console]::Write(" - no inverse") ; SGR 0
+        CUP 15 4 ; SGR  8 ; [console]::Write("Invisible") ; SGR 28 ; [console]::Write(" - no invisible") ; SGR 0
+        CUP 16 4 ; SGR  9 ; [console]::Write("Strikethrough") ; SGR 29 ; [console]::Write(" - no strikethrough") ; SGR 0
+        CUP 17 4 ; SGR 53 ; [console]::Write("Overline") ; SGR 55 ; [console]::Write(" - no overline") ; SGR 0
+        CUP 18 4 ; SGR 51 ; [console]::Write("Framed") ; SGR 54 ; [console]::Write(" - not framed") ; SGR 0
+        CUP 19 4 ; SGR 52 ; [console]::Write("Encircled") ; SGR 54 ; [console]::Write(" - not encircled") ; SGR 0
+        
     
 # See https://github.com/kovidgoyal/kitty/issues/226
     CUP 21 0 ; [console]::Write("SGR 4 extensions to provide underline variants: ") ; 
