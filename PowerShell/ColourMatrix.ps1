@@ -60,8 +60,8 @@ function Set-16Colour {
             }
             "V" {
                 $sgr = if ($isbg) {48} else {38}
-                $pn = if ($script:conformant) { ECMA48SubParams $sgr, 5, $index } else { ECMA48Params $sgr, 5, $index }
-                [console]::Write([string]::format("{0}{1}m", $CSI, $pn))
+                $param = if ($script:conformant) { $(ECMA48SubParams 5, $index) } else { $(ECMA48Params 5, $index) }
+                [console]::Write([string]::format("{0}{1}m", $CSI, $(ECMA48Params $sgr, $param)))
             }
             "T" {
                 $sgr = if ($isbg) {48} else {38}
@@ -75,8 +75,8 @@ function Set-16Colour {
                     $g = (($index -band 2) / 2) * $v
                     $b = (($index -band 4) / 4) * $v
                 }
-                $pn = if ($script:conformant) { ECMA48SubParams $sgr, 2, $null, $r, $g, $b } else { ECMA48Params $sgr, 2, $r, $g, $b }
-                [console]::Write([string]::format("{0}{1}m", $CSI, $pn))
+                $param = if ($script:conformant) { ECMA48SubParams 2, $null, $r, $g, $b } else { ECMA48Params 2, $r, $g, $b }
+                [console]::Write([string]::format("{0}{1}m", $CSI, $(ECMA48Params $sgr, $param)))
             }
         }
     } else {
@@ -105,14 +105,14 @@ function Set-Greyscale {
             }
             "V" {
                 $sgr = if ($isbg) {48} else {38}
-                $pn = if ($script:conformant) { ECMA48SubParams $sgr, 5, $($index + 232) } else { ECMA48Params $sgr, 5, $($index + 232) }
-                [console]::Write([string]::format("{0}{1}m", $CSI, $pn))
+                $param = if ($script:conformant) { ECMA48SubParams 5, $($index + 232) } else { ECMA48Params 5, $($index + 232) }
+                [console]::Write([string]::format("{0}{1}m", $CSI, $(ECMA48Params $sgr, $param)))
             }
             "T" {
                 $index = 8 + $index * 10
                 $sgr = if ($isbg) {48} else {38}
-                $pn = if ($script:conformant) { ECMA48SubParams $sgr, 2, $null, $index, $index, $index } else { ECMA48Params $sgr, 2, $index, $index, $index }
-                [console]::Write([string]::format("{0}{1}m", $CSI, $pn))
+                $param = if ($script:conformant) { ECMA48SubParams 2, $null, $index, $index, $index } else { ECMA48Params 2, $index, $index, $index }
+                [console]::Write([string]::format("{0}{1}m", $CSI, $(ECMA48Params $sgr, $param)))
             }
         }
     } else {
