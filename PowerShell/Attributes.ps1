@@ -103,8 +103,8 @@ function Do-It {
 
     CUP 10 0 ; [console]::Write("Standard attributes:") 
         CUP 11 4 ; SGR  4 ; [console]::Write("Underline") ; SGR 24 ; [console]::Write(" - no underline") ; SGR 0
-        CUP 12 4 ; SGR  5 ; [console]::Write("Slow blink") ; SGR 25 ; [console]::Write(" - no slow blink") ; SGR 0
-        CUP 13 4 ; SGR  6 ; [console]::Write("Rapid blink") ; SGR 26 ; [console]::Write(" - no rapid blink") ; SGR 0
+        CUP 12 4 ; SGR  5 ; [console]::Write("Slow blink") ; SGR 25 ; [console]::Write(" - no blink") ; SGR 0
+        CUP 13 4 ; SGR  6 ; [console]::Write("Rapid blink") ; SGR 25 ; [console]::Write(" - no blink") ; SGR 0
         CUP 14 4 ; SGR  7 ; [console]::Write("Inverse") ; SGR 27 ; [console]::Write(" - no inverse") ; SGR 0
         CUP 15 4 ; SGR  8 ; [console]::Write("Invisible") ; SGR 28 ; [console]::Write(" - no invisible") ; SGR 0
         CUP 16 4 ; SGR  9 ; [console]::Write("Strikethrough") ; SGR 29 ; [console]::Write(" - no strikethrough") ; SGR 0
