@@ -14,7 +14,7 @@ function C1 {
     if ($script:csi7_radiobutton.Checked) {
         $script:CSI = [char]27 + [char]0x5B
         [Console]::OutputEncoding = [System.Text.Encoding]::ASCII
-    } else { 
+    } else {
         $script:CSI = [char]0x9B
         if ($script:csi8_radiobutton.Checked) {
             [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
@@ -36,27 +36,27 @@ function ECMA48SubParams {
     [String]::Join(":",$a)
 }
 
-function CUP { 
-    [console]::Write([string]::format("{0}{1}H", $CSI, $(ECMA48Params $args))) 
+function CUP {
+    [console]::Write([string]::format("{0}{1}H", $CSI, $(ECMA48Params $args)))
 }
 
 function ED {
-    param ($p = 2) 
-    [console]::Write([string]::format("{0}{1:D}J", $CSI, $p)) 
+    param ($p = 2)
+    [console]::Write([string]::format("{0}{1:D}J", $CSI, $p))
 }
 
-function SGR { 
-    [console]::Write([string]::format("{0}{1}m", $CSI, $(ECMA48Params $args))) 
+function SGR {
+    [console]::Write([string]::format("{0}{1}m", $CSI, $(ECMA48Params $args)))
 }
 
 function DECPrivateMode {
-    param ($m = 1, $v = $true) 
+    param ($m = 1, $v = $true)
     $v = if ($v) {"h"} else {"l"}
-    [console]::Write([string]::format("{0}?{1:D}{2}", $CSI, $m, $v)) 
+    [console]::Write([string]::format("{0}?{1:D}{2}", $CSI, $m, $v))
 }
 
 function DECSCNM {
-    param ($v = $true) 
+    param ($v = $true)
     DECPrivateMode 5 $v
 }
 
@@ -66,29 +66,29 @@ function Do-It {
 	DECSCNM $($script:scnm -gt 0)
     ED 2
 
-    CUP  1 0 ; [console]::Write("Font weights and slants:") 
-        CUP  2 4 ; 
-            SGR  1 ; [console]::Write("Upright boldface") ; 
-            SGR  2 ; [console]::Write(" - demibold (faint boldface)") ; 
-            SGR 22 ; [console]::Write(" - not boldface nor demibold") ; 
+    CUP  1 0 ; [console]::Write("Font weights and slants:")
+        CUP  2 4 ;
+            SGR  1 ; [console]::Write("Upright boldface") ;
+            SGR  2 ; [console]::Write(" - demibold (faint boldface)") ;
+            SGR 22 ; [console]::Write(" - not boldface nor demibold") ;
             SGR 0
-        CUP  3 4 ; 
-            SGR  0 ; [console]::Write("Upright medium (normal)") 
-            SGR  2 ; [console]::Write(" - light (faint normal)") ; 
-            SGR 22 ; [console]::Write(" - not light") ; 
+        CUP  3 4 ;
+            SGR  0 ; [console]::Write("Upright medium (normal)")
+            SGR  2 ; [console]::Write(" - light (faint normal)") ;
+            SGR 22 ; [console]::Write(" - not light") ;
             SGR 0
-        CUP  4 4 ; 
-            SGR  1 3 ; [console]::Write("Italic boldface") ; 
-            SGR  2 ; [console]::Write(" - demibold (faint boldface)") ; 
-            SGR 22 ; [console]::Write(" - not boldface nor demibold") ; 
+        CUP  4 4 ;
+            SGR  1 3 ; [console]::Write("Italic boldface") ;
+            SGR  2 ; [console]::Write(" - demibold (faint boldface)") ;
+            SGR 22 ; [console]::Write(" - not boldface nor demibold") ;
             SGR 0
-        CUP  5 4 ; 
-            SGR  3 ; [console]::Write("Italic medium (normal)") 
-            SGR  2 ; [console]::Write(" - light (faint normal)") ; 
-            SGR 22 ; [console]::Write(" - not light") ; 
+        CUP  5 4 ;
+            SGR  3 ; [console]::Write("Italic medium (normal)")
+            SGR  2 ; [console]::Write(" - light (faint normal)") ;
+            SGR 22 ; [console]::Write(" - not light") ;
             SGR 0
         CUP  7 4 ; SGR  3 ; [console]::Write("Italic") ; SGR 23 ; [console]::Write(" - no italic") ; SGR 0
-        CUP  8 4 ; 
+        CUP  8 4 ;
             SGR 10 ; [console]::Write("SGR 10") ; SGR 0 ; [console]::Write(" - ")
             SGR 11 ; [console]::Write("SGR 11") ; SGR 0 ; [console]::Write(" - ")
             SGR 12 ; [console]::Write("SGR 12") ; SGR 0 ; [console]::Write(" - ")
@@ -99,9 +99,9 @@ function Do-It {
             SGR 17 ; [console]::Write("SGR 17") ; SGR 0 ; [console]::Write(" - ")
             SGR 18 ; [console]::Write("SGR 18") ; SGR 0 ; [console]::Write(" - ")
             SGR 19 ; [console]::Write("SGR 19") ; SGR 0 ; #[console]::Write(" - ")
-        
 
-    CUP 10 0 ; [console]::Write("Standard attributes:") 
+
+    CUP 10 0 ; [console]::Write("Standard attributes:")
         CUP 11 4 ; SGR  4 ; [console]::Write("Underline") ; SGR 24 ; [console]::Write(" - no underline") ; SGR 0
         CUP 12 4 ; SGR  5 ; [console]::Write("Slow blink") ; SGR 25 ; [console]::Write(" - no slow blink") ; SGR 0
         CUP 13 4 ; SGR  6 ; [console]::Write("Rapid blink") ; SGR 26 ; [console]::Write(" - no rapid blink") ; SGR 0
@@ -111,10 +111,10 @@ function Do-It {
         CUP 17 4 ; SGR 53 ; [console]::Write("Overline") ; SGR 55 ; [console]::Write(" - no overline") ; SGR 0
         CUP 18 4 ; SGR 51 ; [console]::Write("Framed") ; SGR 54 ; [console]::Write(" - not framed") ; SGR 0
         CUP 19 4 ; SGR 52 ; [console]::Write("Encircled") ; SGR 54 ; [console]::Write(" - not encircled") ; SGR 0
-        
-    
+
+
 # See https://github.com/kovidgoyal/kitty/issues/226
-    CUP 21 0 ; [console]::Write("SGR 4 extensions to provide underline variants: ") ; 
+    CUP 21 0 ; [console]::Write("SGR 4 extensions to provide underline variants: ") ;
     CUP 22 4
         SGR $(ECMA48SubParams 4 $null) ; [console]::Write("empty-default ") ; SGR 24
         SGR $(ECMA48SubParams 4 0) ; [console]::Write("zero-default ") ; SGR 24
@@ -128,7 +128,7 @@ function Do-It {
         SGR $(ECMA48SubParams 4 8) ; [console]::Write("ldotted ") ; SGR 24
         SGR $(ECMA48SubParams 4 9) ; [console]::Write("lcurly ") ; SGR 24
         SGR 0
-    
+
     SGR
     CUP 23 0
 }
